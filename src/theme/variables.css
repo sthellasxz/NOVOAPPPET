@@ -1,2 +1,45 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
+/* No arquivo src/theme/variables.css */
+:root {
+  /* Paleta PetMatch (fiel ao protótipo Figma) */
+  --petmatch-slate: #607985;
+  --petmatch-slate-shade: #46606b;
+  --petmatch-white: #ffffff;
+  --petmatch-black: #000000;
+  --petmatch-mint: #b5d0cd;
+  --petmatch-green: #6bbf73;
+  --petmatch-red: #e85d5d;
+
+  --ion-color-meucustom: var(--petmatch-slate);
+  --ion-color-meucustom-rgb: 96,121,133;
+  --ion-color-meucustom-contrast: #ffffff;
+  --ion-color-meucustom-contrast-rgb: 255,255,255;
+  --ion-color-meucustom-shade: #46606b;
+  --ion-color-meucustom-tint: #758f9a;
+
+  --ion-font-family: 'Poppins', sans-serif;
+}
+
+.ion-color-meucustom {
+  --ion-color-base: var(--ion-color-meucustom);
+  --ion-color-base-rgb: var(--ion-color-meucustom-rgb);
+  --ion-color-contrast: var(--ion-color-meucustom-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-meucustom-contrast-rgb);
+  --ion-color-shade: var(--ion-color-meucustom-shade);
+  --ion-color-tint: var(--ion-color-meucustom-tint);
+}
+
+body,
+ion-app {
+  font-family: 'Poppins', sans-serif;
+}
+
+ion-footer {
+  --background: transparent;
+  background: transparent;
+}
+
+ion-footer::before {
+  display: none;
+}

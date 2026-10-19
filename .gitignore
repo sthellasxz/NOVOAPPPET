@@ -30,3 +30,18 @@ npm-debug.log*
 /platforms
 /plugins
 /www
+
+# Android build artifacts
+/android/app/build
+/android/build
+/android/local.properties
+/android/.gradle
+/android/captures
+/android/.externalNativeBuild
+/android/.cxx
+
+# Playwright MCP debug output
+/.playwright-mcp
+
+# Claude Code local settings
+/.claude/settings.local.json
