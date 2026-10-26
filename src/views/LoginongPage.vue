@@ -2,27 +2,31 @@
   <IonPage>
     <IonContent fullscreen class="fundo-auth">
       <div class="container-auth">
-        <div class="logo-auth">
-          <ion-icon :icon="pawOutline"></ion-icon>
-          PetMatch
+        <div class="topo-auth">
+          <div class="marca-auth">
+            <span class="marca-icone"><ion-icon :icon="pawOutline"></ion-icon></span>
+            PetMatch
+          </div>
+          <button type="button" class="link-trocar" @click="router.push('/cadastroong')">Criar conta</button>
         </div>
 
         <div class="card-auth">
-          <h1 class="titulo-auth">Login ONG</h1>
-          <button type="button" class="link-trocar" @click="router.push('/cadastroong')">CRIAR CONTA</button>
+          <h1 class="titulo-auth">Entrar como ONG</h1>
+          <p class="subtitulo-auth">Acesse a conta da sua organização para gerenciar os pets</p>
 
           <div class="campo-auth">
-            <label>Email ou CNPJ da Organização</label>
+            <label>Email ou CNPJ da organização</label>
             <div class="input-com-icone">
-              <input v-model="email" type="text" autocomplete="off" />
-              <ion-icon :icon="pencilOutline"></ion-icon>
+              <ion-icon :icon="mailOutline" class="icone-campo"></ion-icon>
+              <input v-model="email" type="text" autocomplete="off" placeholder="ong@email.com" />
             </div>
           </div>
 
           <div class="campo-auth">
             <label>Senha</label>
             <div class="input-com-icone">
-              <input v-model="senha" :type="mostrarSenha ? 'text' : 'password'" autocomplete="new-password" />
+              <ion-icon :icon="lockClosedOutline" class="icone-campo"></ion-icon>
+              <input v-model="senha" :type="mostrarSenha ? 'text' : 'password'" autocomplete="new-password" placeholder="Sua senha" />
               <ion-icon
                 :icon="mostrarSenha ? eyeOffOutline : eyeOutline"
                 class="icone-clicavel"
@@ -54,7 +58,7 @@ import {
   IonIcon,
   onIonViewWillEnter,
 } from '@ionic/vue';
-import { pawOutline, pencilOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { pawOutline, mailOutline, lockClosedOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { loginOng, AuthError } from '@/services/auth';
 import { iniciarSessao } from '@/services/session';
@@ -94,66 +98,98 @@ const fazerlogin = async () => {
 
 <style scoped>
 .fundo-auth {
-  --background: var(--petmatch-white);
+  --background: #f4f6f7;
 }
 
 .container-auth {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   min-height: 100%;
-  padding: 32px 20px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 28px 20px 40px;
 }
 
-.logo-auth {
+.topo-auth {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.marca-auth {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1.3rem;
-  font-weight: 800;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: var(--petmatch-slate);
-  margin-bottom: 20px;
+}
+
+.marca-icone {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: var(--petmatch-mint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marca-icone ion-icon {
+  font-size: 16px;
+  color: var(--petmatch-slate-shade);
+}
+
+.link-trocar {
+  background: none;
+  border: 1.5px solid #e3e8ea;
+  border-radius: 10px;
+  padding: 7px 14px;
+  color: var(--petmatch-slate);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.link-trocar:hover {
+  border-color: var(--petmatch-slate);
 }
 
 .card-auth {
   width: 100%;
-  max-width: 420px;
-  background: var(--petmatch-slate);
-  border-radius: 22px;
-  padding: 26px 22px;
+  background: var(--petmatch-white);
+  border: 1.5px solid #e3e8ea;
+  border-radius: 20px;
+  padding: 28px 24px;
 }
 
 .titulo-auth {
-  margin: 0 0 4px;
-  text-align: center;
-  color: var(--petmatch-white);
-  font-size: 1.3rem;
-  font-weight: 800;
-  text-transform: uppercase;
+  margin: 0 0 6px;
+  color: var(--petmatch-black);
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
-.link-trocar {
-  display: block;
-  margin: 0 auto 20px;
-  background: none;
-  border: none;
-  color: var(--petmatch-mint);
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
+.subtitulo-auth {
+  margin: 0 0 24px;
+  color: var(--petmatch-black);
+  opacity: 0.6;
+  font-size: 0.88rem;
+  line-height: 1.4;
 }
 
 .campo-auth {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .campo-auth label {
   display: block;
-  color: var(--petmatch-white);
-  font-size: 0.78rem;
+  color: var(--petmatch-black);
+  opacity: 0.75;
+  font-size: 0.8rem;
   font-weight: 600;
   margin-bottom: 6px;
 }
@@ -161,50 +197,67 @@ const fazerlogin = async () => {
 .input-com-icone {
   display: flex;
   align-items: center;
-  background: var(--petmatch-mint);
-  border-radius: 10px;
-  overflow: hidden;
+  background: var(--petmatch-white);
+  border: 1.5px solid #e3e8ea;
+  border-radius: 12px;
+  padding: 0 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-com-icone:focus-within {
+  border-color: var(--petmatch-slate);
+  box-shadow: 0 0 0 3px rgba(96, 121, 133, 0.14);
+}
+
+.icone-campo {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: #9aa5aa;
+  margin-right: 10px;
 }
 
 .input-com-icone input {
   flex: 1;
   border: none;
   background: transparent;
-  padding: 12px 14px;
-  font-size: 0.9rem;
+  padding: 13px 0;
+  font-size: 0.92rem;
   font-family: inherit;
-  color: var(--petmatch-slate-shade);
+  color: var(--petmatch-black);
   outline: none;
   min-width: 0;
 }
 
-.input-com-icone ion-icon {
-  flex-shrink: 0;
-  width: 38px;
-  height: 38px;
-  margin-right: 6px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.4);
-  color: var(--petmatch-slate-shade);
-  padding: 8px;
-  box-sizing: border-box;
+.input-com-icone input::placeholder {
+  color: #aab3b8;
 }
 
 .icone-clicavel {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: #9aa5aa;
   cursor: pointer;
+  padding: 4px;
+  margin-left: 4px;
+}
+
+.icone-clicavel:hover {
+  color: var(--petmatch-slate);
 }
 
 .erro-texto {
   color: var(--petmatch-red);
-  font-size: 0.8rem;
-  margin: 4px 2px 8px;
+  font-size: 0.82rem;
+  margin: -4px 2px 14px;
 }
 
 .botao-auth {
-  --background: var(--petmatch-white);
-  --color: var(--petmatch-slate-shade);
+  --background: var(--petmatch-slate);
+  --background-hover: var(--petmatch-slate-shade);
+  --color: var(--petmatch-white);
   --border-radius: 12px;
-  font-weight: 700;
-  margin-top: 10px;
+  font-weight: 600;
+  height: 48px;
+  margin-top: 6px;
 }
 </style>
