@@ -62,16 +62,24 @@
           <div class="campo-auth">
             <label>Senha</label>
             <div class="input-com-icone">
-              <input v-model="senha" type="password" autocomplete="new-password" placeholder="**********" />
-              <ion-icon :icon="pencilOutline"></ion-icon>
+              <input v-model="senha" :type="mostrarSenha ? 'text' : 'password'" autocomplete="new-password" placeholder="**********" />
+              <ion-icon
+                :icon="mostrarSenha ? eyeOffOutline : eyeOutline"
+                class="icone-clicavel"
+                @click="mostrarSenha = !mostrarSenha"
+              ></ion-icon>
             </div>
           </div>
 
           <div class="campo-auth">
             <label>Confirmar Senha</label>
             <div class="input-com-icone">
-              <input v-model="confirmarsenha" type="password" autocomplete="new-password" placeholder="**********" />
-              <ion-icon :icon="pencilOutline"></ion-icon>
+              <input v-model="confirmarsenha" :type="mostrarConfirmarSenha ? 'text' : 'password'" autocomplete="new-password" placeholder="**********" />
+              <ion-icon
+                :icon="mostrarConfirmarSenha ? eyeOffOutline : eyeOutline"
+                class="icone-clicavel"
+                @click="mostrarConfirmarSenha = !mostrarConfirmarSenha"
+              ></ion-icon>
             </div>
           </div>
 
@@ -109,7 +117,7 @@ import {
   toastController,
   onIonViewWillEnter,
 } from '@ionic/vue';
-import { pawOutline, pencilOutline } from 'ionicons/icons';
+import { pawOutline, pencilOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { cadastrarPessoa, AuthError } from '@/services/auth';
 
@@ -123,6 +131,8 @@ const cep = ref('');
 const nomeusuario = ref('');
 const senha = ref('');
 const confirmarsenha =ref('')
+const mostrarSenha = ref(false);
+const mostrarConfirmarSenha = ref(false);
 const erroCadastro = ref('');
 const carregando = ref(false);
 
@@ -139,6 +149,8 @@ function limpar() {
   for (const campo of [name, email, numero, cpf, cep, nomeusuario, senha, confirmarsenha, erroCadastro]) {
     campo.value = '';
   }
+  mostrarSenha.value = false;
+  mostrarConfirmarSenha.value = false;
 }
 
 onIonViewWillEnter(limpar);
@@ -270,6 +282,10 @@ const cadastrar = async () => {
   color: var(--petmatch-slate-shade);
   padding: 8px;
   box-sizing: border-box;
+}
+
+.icone-clicavel {
+  cursor: pointer;
 }
 
 .erro-texto {

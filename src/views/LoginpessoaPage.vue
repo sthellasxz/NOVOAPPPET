@@ -22,8 +22,12 @@
           <div class="campo-auth">
             <label>Senha</label>
             <div class="input-com-icone">
-              <input v-model="senha" type="password" autocomplete="new-password" />
-              <ion-icon :icon="pencilOutline"></ion-icon>
+              <input v-model="senha" :type="mostrarSenha ? 'text' : 'password'" autocomplete="new-password" />
+              <ion-icon
+                :icon="mostrarSenha ? eyeOffOutline : eyeOutline"
+                class="icone-clicavel"
+                @click="mostrarSenha = !mostrarSenha"
+              ></ion-icon>
             </div>
           </div>
 
@@ -50,7 +54,7 @@ import {
   IonIcon,
   onIonViewWillEnter,
 } from '@ionic/vue';
-import { pawOutline, pencilOutline } from 'ionicons/icons';
+import { pawOutline, pencilOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 import { loginPessoa, AuthError } from '@/services/auth';
 import { iniciarSessao } from '@/services/session';
@@ -59,12 +63,14 @@ const router = useRouter();
 
 const email = ref('');
 const senha = ref('');
+const mostrarSenha = ref(false);
 const erroLogin = ref('');
 const carregando = ref(false);
 
 onIonViewWillEnter(() => {
   email.value = '';
   senha.value = '';
+  mostrarSenha.value = false;
   erroLogin.value = '';
 });
 
@@ -182,6 +188,10 @@ const fazerlogin = async () => {
   color: var(--petmatch-slate-shade);
   padding: 8px;
   box-sizing: border-box;
+}
+
+.icone-clicavel {
+  cursor: pointer;
 }
 
 .erro-texto {
