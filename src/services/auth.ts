@@ -216,3 +216,49 @@ export async function atualizarPerfilOng(id: number, dados: DadosPerfilOng): Pro
   );
   await persistirBanco();
 }
+
+function normalizarDocumento(valor: string): string {
+  return valor.replace(/\D/g, '');
+}
+
+export async function redefinirSenhaPessoa(identificador: string, cpf: string, novaSenha: string): Promise<void> {
+  if (novaSenha.length < 6) {
+    throw new AuthError('A nova senha deve ter pelo menos 6 caracteres.');
+  }
+
+  const db = await getDb();
+  const resultado = await db.query(
+    'SELECT id, cpf FROM pessoa WHERE email = ? OR nomeusuario = ?',
+    [identificador, identificador]
+  );
+  const usuario = resultado.values?.[0] as { id: number; cpf: string | null } | undefined;
+  const cpfConfere = !!usuario?.cpf && normalizarDocumento(usuario.cpf) === normalizarDocumento(cpf);
+  if (!usuario || !cpfConfere) {
+    throw new AuthError('Não foi possível confirmar os dados informados.');
+  }
+
+  const senhaHash = await criarSenhaHash(novaSenha);
+  await db.run('UPDATE pessoa SET senha_hash = ? WHERE id = ?', [senhaHash, usuario.id]);
+  await persistirBanco();
+}
+
+export async function redefinirSenhaOng(identificador: string, cnpj: string, novaSenha: string): Promise<void> {
+  if (novaSenha.length < 6) {
+    throw new AuthError('A nova senha deve ter pelo menos 6 caracteres.');
+  }
+
+  const db = await getDb();
+  const resultado = await db.query(
+    'SELECT id, cnpj FROM ong WHERE email = ? OR nomeusuario = ?',
+    [identificador, identificador]
+  );
+  const usuario = resultado.values?.[0] as { id: number; cnpj: string | null } | undefined;
+  const cnpjConfere = !!usuario?.cnpj && normalizarDocumento(usuario.cnpj) === normalizarDocumento(cnpj);
+  if (!usuario || !cnpjConfere) {
+    throw new AuthError('Não foi possível confirmar os dados informados.');
+  }
+
+  const senhaHash = await criarSenhaHash(novaSenha);
+  await db.run('UPDATE ong SET senha_hash = ? WHERE id = ?', [senhaHash, usuario.id]);
+  await persistirBanco();
+}

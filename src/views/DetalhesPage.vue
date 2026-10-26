@@ -26,33 +26,74 @@
             {{ pet.adotado ? 'Adotado' : 'Disponível' }}
           </ion-badge>
         </div>
-        <div class="divisor"></div>
 
-        <div class="lista-detalhes">
-          <p><strong>Espécie:</strong> {{ pet.especie }}</p>
-          <p v-if="pet.situacao"><strong>Situação:</strong> {{ pet.situacao }}</p>
-          <p><strong>Idade:</strong> {{ formatarIdade(pet.idade_meses) }}</p>
-          <p><strong>Porte:</strong> {{ pet.porte || 'Não informado' }}</p>
-          <p><strong>Raça:</strong> {{ pet.raca || 'Não informada' }}</p>
-          <p><strong>Sexo:</strong> {{ pet.sexo || 'Não informado' }}</p>
-          <p><strong>Castrado:</strong> {{ pet.castrado ? 'Sim' : 'Não' }}</p>
-          <p><strong>Vacinado:</strong> {{ pet.vacinado ? 'Sim' : 'Não' }}</p>
-          <p><strong>CEP:</strong> {{ pet.cep || 'Não informado' }}</p>
-          <p class="clicavel" @click="ligarContato"><strong>Contato:</strong> {{ pet.contato || 'Não informado' }}</p>
-          <p class="clicavel" @click="verPerfilAnunciante"><strong>Anunciante:</strong> ver perfil de quem cadastrou</p>
+        <div class="chips-rapidos">
+          <span class="chip">{{ pet.especie }}</span>
+          <span class="chip" v-if="pet.situacao">{{ pet.situacao }}</span>
+          <span class="chip">{{ formatarIdade(pet.idade_meses) }}</span>
         </div>
 
-        <div class="divisor" v-if="pet.descricao"></div>
+        <div class="grade-info">
+          <div class="info-item">
+            <span class="info-label">Porte</span>
+            <span class="info-valor">{{ pet.porte || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Raça</span>
+            <span class="info-valor">{{ pet.raca || 'Não informada' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Sexo</span>
+            <span class="info-valor">{{ pet.sexo || 'Não informado' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Castrado</span>
+            <span class="info-valor">{{ pet.castrado ? 'Sim' : 'Não' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Vacinado</span>
+            <span class="info-valor">{{ pet.vacinado ? 'Sim' : 'Não' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">CEP</span>
+            <span class="info-valor">{{ pet.cep || 'Não informado' }}</span>
+          </div>
+        </div>
 
-        <div v-if="pet.descricao" class="lista-detalhes">
+        <div class="lista-contato">
+          <button type="button" class="linha-contato" @click="ligarContato">
+            <span class="icone-contato"><ion-icon :icon="callOutline"></ion-icon></span>
+            <span class="linha-contato-texto">
+              <strong>Contato</strong>
+              <span>{{ pet.contato || 'Não informado' }}</span>
+            </span>
+            <ion-icon :icon="chevronForwardOutline" class="seta"></ion-icon>
+          </button>
+          <button type="button" class="linha-contato" @click="verPerfilAnunciante">
+            <span class="icone-contato"><ion-icon :icon="personOutline"></ion-icon></span>
+            <span class="linha-contato-texto">
+              <strong>Anunciante</strong>
+              <span>Ver perfil de quem cadastrou</span>
+            </span>
+            <ion-icon :icon="chevronForwardOutline" class="seta"></ion-icon>
+          </button>
+        </div>
+
+        <div v-if="pet.descricao" class="bloco-descricao">
+          <span class="info-label">Sobre {{ pet.nome }}</span>
           <p class="descricao">{{ pet.descricao }}</p>
         </div>
 
         <p class="data-cadastro">Anunciado em {{ formatarData(pet.criado_em) }}</p>
 
-        <ion-button v-if="podeAdotar" expand="block" class="botao-adotar" @click="demonstrarInteresse">
-          <ion-icon :icon="heartOutline" slot="start"></ion-icon>
-          Tenho interesse
+        <ion-button v-if="podeAdotar" expand="block" class="botao-adotar" @click="irParaConversa">
+          <ion-icon :icon="chatbubbleOutline" slot="start"></ion-icon>
+          Conversar com o anunciante
+        </ion-button>
+
+        <ion-button v-if="podeAdotar" expand="block" fill="outline" class="botao-contato" @click="demonstrarInteresse">
+          <ion-icon :icon="callOutline" slot="start"></ion-icon>
+          Ligar ou WhatsApp
         </ion-button>
 
         <div class="botoes-acao" v-if="souDono">
@@ -92,7 +133,10 @@ import {
 } from '@ionic/vue'
 import {
   pawOutline,
-  heartOutline,
+  chatbubbleOutline,
+  callOutline,
+  personOutline,
+  chevronForwardOutline,
   createOutline,
   trashOutline,
   checkmarkCircleOutline,
@@ -127,7 +171,7 @@ onMounted(async () => {
 })
 
 const formatarIdade = (idadeMeses: number | null) => {
-  if (idadeMeses === null || idadeMeses === undefined) return 'Não informada'
+  if (idadeMeses === null || idadeMeses === undefined) return 'Idade não informada'
   if (idadeMeses < 12) {
     return `${idadeMeses} ${idadeMeses === 1 ? 'mês' : 'meses'}`
   }
@@ -152,6 +196,15 @@ const ligarContato = () => {
   if (pet.value?.contato) {
     window.location.href = `tel:${pet.value.contato}`
   }
+}
+
+const irParaConversa = () => {
+  if (!sessao.value) {
+    router.push('/login')
+    return
+  }
+  if (!pet.value) return
+  router.push(`/conversa/${pet.value.id}/${pet.value.dono_tipo}/${pet.value.dono_id}`)
 }
 
 const demonstrarInteresse = async () => {
@@ -256,7 +309,7 @@ const verPerfilAnunciante = () => {
   margin: 8px 16px 0;
   background: var(--petmatch-mint);
   border-radius: 20px;
-  padding: 16px;
+  padding: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -292,41 +345,142 @@ const verPerfilAnunciante = () => {
 
 .titulo-linha h1 {
   margin: 0;
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--petmatch-slate-shade);
 }
 
-.divisor {
-  height: 8px;
-  border-radius: 999px;
-  background: var(--petmatch-slate);
-  margin: 12px 0 16px;
+.chips-rapidos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
 }
 
-.lista-detalhes p {
-  margin: 0 0 10px;
-  font-size: 0.95rem;
+.chip {
+  background: var(--petmatch-mint);
+  color: var(--petmatch-slate-shade);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.grade-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.info-item {
+  background: var(--petmatch-white);
+  border: 1.5px solid #e3e8ea;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.info-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--petmatch-slate-shade);
+  opacity: 0.7;
+}
+
+.info-valor {
+  font-size: 0.92rem;
+  font-weight: 600;
   color: var(--petmatch-black);
 }
 
-.lista-detalhes p strong {
+.lista-contato {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.linha-contato {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  background: var(--petmatch-white);
+  border: 1.5px solid #e3e8ea;
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.icone-contato {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--petmatch-mint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icone-contato ion-icon {
+  font-size: 18px;
   color: var(--petmatch-slate-shade);
 }
 
-.clicavel {
-  cursor: pointer;
-  text-decoration: underline;
-  text-decoration-color: var(--petmatch-mint);
+.linha-contato-texto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.linha-contato-texto strong {
+  font-size: 0.85rem;
+  color: var(--petmatch-slate-shade);
+}
+
+.linha-contato-texto span {
+  font-size: 0.88rem;
+  color: var(--petmatch-black);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seta {
+  flex-shrink: 0;
+  font-size: 16px;
+  color: var(--petmatch-slate);
+  opacity: 0.6;
+}
+
+.bloco-descricao {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--petmatch-white);
+  border: 1.5px solid #e3e8ea;
+  border-radius: 14px;
+  padding: 14px;
+  margin-top: 16px;
 }
 
 .descricao {
+  margin: 0;
   line-height: 1.5;
   white-space: pre-line;
+  font-size: 0.92rem;
+  color: var(--petmatch-black);
 }
 
 .data-cadastro {
-  margin: 12px 0 20px;
+  margin: 14px 0 20px;
   font-size: 0.78rem;
   color: var(--petmatch-slate-shade);
   opacity: 0.7;
@@ -334,6 +488,13 @@ const verPerfilAnunciante = () => {
 
 .botao-adotar {
   --background: var(--petmatch-slate);
+  --border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.botao-contato {
+  --color: var(--petmatch-slate);
+  --border-color: var(--petmatch-slate);
   --border-radius: 12px;
   margin-bottom: 12px;
 }

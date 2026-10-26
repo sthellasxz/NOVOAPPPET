@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { IonIcon } from '@ionic/vue';
 import { useRoute, useRouter } from 'vue-router';
-import { homeOutline, addCircleOutline, shieldCheckmarkOutline, heartOutline } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, shieldCheckmarkOutline, heartOutline, chatbubbleOutline } from 'ionicons/icons';
 import { usarSessao } from '@/services/session';
 
 const route = useRoute();
@@ -40,6 +40,7 @@ function irParaPerfil() {
 const itens = [
   { rota: '/home', label: 'Home', icone: homeOutline, acao: () => router.push('/home') },
   { rota: '/cadastro-pet', label: 'Cadastrar Pet', icone: addCircleOutline, acao: () => router.push('/cadastro-pet') },
+  { rota: '/conversas', label: 'Mensagens', icone: chatbubbleOutline, acao: () => router.push('/conversas') },
   { rota: '/perfil', label: 'Perfil', icone: shieldCheckmarkOutline, acao: irParaPerfil },
   { rota: '/favoritos', label: 'Favoritos', icone: heartOutline, acao: () => router.push('/favoritos') },
 ];

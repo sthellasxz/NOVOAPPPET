@@ -33,6 +33,7 @@
                 @click="mostrarSenha = !mostrarSenha"
               ></ion-icon>
             </div>
+            <button type="button" class="link-esqueci" @click="router.push('/redefinirsenhapessoa')">Esqueci minha senha</button>
           </div>
 
           <IonText color="danger" v-if="erroLogin">
@@ -243,6 +244,18 @@ const fazerlogin = async () => {
 
 .icone-clicavel:hover {
   color: var(--petmatch-slate);
+}
+
+.link-esqueci {
+  display: block;
+  width: fit-content;
+  margin: 8px 2px 0 auto;
+  background: none;
+  border: none;
+  color: var(--petmatch-slate);
+  font-weight: 600;
+  font-size: 0.78rem;
+  cursor: pointer;
 }
 
 .erro-texto {

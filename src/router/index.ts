@@ -12,6 +12,10 @@ import CadastroPetPage from '@/views/CadastroPetPage.vue';
 import PerfilPage from '@/views/PerfilPage.vue';
 import FavoritosPage from '@/views/FavoritosPage.vue';
 import SplashPage from '@/views/SplashPage.vue';
+import ConversasPage from '@/views/ConversasPage.vue';
+import ChatPage from '@/views/ChatPage.vue';
+import RedefinirSenhaPessoaPage from '@/views/RedefinirSenhaPessoaPage.vue';
+import RedefinirSenhaOngPage from '@/views/RedefinirSenhaOngPage.vue';
 import { usarSessao } from '@/services/session';
 
 
@@ -80,6 +84,26 @@ const routes: Array<RouteRecordRaw> = [
     path: '/favoritos',
     name: 'Favoritos',
     component: FavoritosPage
+  },
+  {
+    path: '/conversas',
+    name: 'Conversas',
+    component: ConversasPage
+  },
+  {
+    path: '/conversa/:petId/:tipo/:id',
+    name: 'Chat',
+    component: ChatPage
+  },
+  {
+    path: '/redefinirsenhapessoa',
+    name: 'RedefinirSenhaPessoa',
+    component: RedefinirSenhaPessoaPage
+  },
+  {
+    path: '/redefinirsenhaong',
+    name: 'RedefinirSenhaOng',
+    component: RedefinirSenhaOngPage
   }
 ];
 
@@ -88,7 +112,10 @@ const router = createRouter({
   routes
 });
 
-const ROTAS_PUBLICAS = ['/', '/login', '/loginpessoa', '/loginong', '/cadastro', '/cadastropessoa', '/cadastroong'];
+const ROTAS_PUBLICAS = [
+  '/', '/login', '/loginpessoa', '/loginong', '/cadastro', '/cadastropessoa', '/cadastroong',
+  '/redefinirsenhapessoa', '/redefinirsenhaong',
+];
 
 router.beforeEach((to) => {
   const sessao = usarSessao();

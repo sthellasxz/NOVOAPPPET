@@ -60,6 +60,18 @@ const CREATE_TABLES = `
     criado_em TEXT DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(usuario_tipo, usuario_id, pet_id)
   );
+
+  CREATE TABLE IF NOT EXISTS mensagem (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pet_id INTEGER NOT NULL,
+    remetente_tipo TEXT NOT NULL CHECK (remetente_tipo IN ('pessoa', 'ong')),
+    remetente_id INTEGER NOT NULL,
+    destinatario_tipo TEXT NOT NULL CHECK (destinatario_tipo IN ('pessoa', 'ong')),
+    destinatario_id INTEGER NOT NULL,
+    texto TEXT NOT NULL,
+    lida INTEGER NOT NULL DEFAULT 0,
+    criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+  );
 `;
 
 const sqlite = new SQLiteConnection(CapacitorSQLite);
